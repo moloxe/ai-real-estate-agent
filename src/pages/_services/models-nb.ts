@@ -1,18 +1,10 @@
 import { getBaseUrl } from "../../stores/models-nb";
-
-export interface MlpRequest {
-  col1: any;
-  col2: any;
-  col3: any;
-}
-
-export interface LstmRequest {
-  input: string;
-}
-
-export interface ModelsResponse {
-  ans: number;
-}
+import type {
+  LstmRequest,
+  MlpRequest,
+  MlpResponse,
+  ModelsResponse,
+} from "../_types/types";
 
 class ModelsNBService {
   static async healthCheck() {
@@ -23,7 +15,7 @@ class ModelsNBService {
     return response.json();
   }
 
-  static async mlp(data: MlpRequest): Promise<ModelsResponse> {
+  static async mlp(data: MlpRequest): Promise<MlpResponse> {
     const response = await fetch(`${getBaseUrl()}/mlp`, {
       method: "POST",
       headers: {

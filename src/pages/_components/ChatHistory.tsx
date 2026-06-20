@@ -23,6 +23,19 @@ export function ChatHistory({ messages, status, isTyping }: ChatHistoryProps) {
 
       {messages.map((msg, index) => {
         const className = `max-w-[80%] rounded-lg p-3 leading-[1.4] wrap-break-word shadow-md shadow-blue-950/10`;
+
+        if (msg.thinking) {
+          return (
+            <div
+              key={index}
+              className={`${className} mr-auto flex items-center gap-2 rounded-bl-none border border-amber-200 bg-amber-50 text-amber-800`}
+            >
+              <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-amber-500" />
+              <span className="text-sm italic">{msg.thinking}</span>
+            </div>
+          );
+        }
+
         if (msg.role === "assistant") {
           return (
             <div
