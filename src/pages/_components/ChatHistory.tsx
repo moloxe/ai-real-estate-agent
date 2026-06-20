@@ -37,6 +37,13 @@ export function ChatHistory({ messages, status, isTyping }: ChatHistoryProps) {
             key={index}
             className={`${className} ml-auto rounded-br-none bg-blue-600 text-white`}
           >
+            {msg.image && (
+              <img
+                src={msg.image}
+                alt="Imagen adjunta"
+                className="mb-2 max-h-48 w-full rounded-md object-cover"
+              />
+            )}
             {msg.text}
           </div>
         );

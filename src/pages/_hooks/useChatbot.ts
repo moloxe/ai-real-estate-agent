@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import type { Message } from "../_types/types";
 import { PRE_PROMPTS } from "../_constants/pre-prompts";
+import ModelsNBService from "../_services/models-nb";
 
 declare global {
   interface Window {
@@ -8,14 +9,36 @@ declare global {
   }
 }
 
+function fileToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 export function useChatbot() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [status, setStatus] = useState<"checking" | "ready" | "unavailable">(
     "checking",
   );
   const [isTyping, setIsTyping] = useState(false);
   const sessionRef = useRef<any>(null);
+
+  // Generate preview URL when image changes
+  useEffect(() => {
+    if (!selectedImage) {
+      setImagePreview(null);
+      return;
+    }
+    const url = URL.createObjectURL(selectedImage);
+    setImagePreview(url);
+    return () => URL.revokeObjectURL(url);
+  }, [selectedImage]);
 
   useEffect(() => {
     async function initAI() {
@@ -59,17 +82,45 @@ export function useChatbot() {
     };
   }, []);
 
+  const removeImage = () => {
+    setSelectedImage(null);
+  };
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!input.trim() || status !== "ready" || !sessionRef.current) return;
 
     const userMessage = input;
-    setMessages((prev) => [...prev, { role: "user", text: userMessage }]);
+    const attachedImage = selectedImage;
+
+    // Build the user message with optional image preview
+    let imageDataUrl: string | undefined;
+    if (attachedImage) {
+      imageDataUrl = await fileToDataUrl(attachedImage);
+    }
+
+    setMessages((prev) => [
+      ...prev,
+      { role: "user", text: userMessage, image: imageDataUrl },
+    ]);
     setInput("");
+    setSelectedImage(null);
     setIsTyping(true);
 
     try {
-      const response = await sessionRef.current.prompt(userMessage);
+      // If there's an image, get CNN prediction and append to prompt
+      let promptText = userMessage;
+
+      if (attachedImage) {
+        try {
+          const cnnResult = await ModelsNBService.cnn(attachedImage);
+          promptText += `\n\n[PREDICCIÓN MODELO CNN]: ${JSON.stringify(cnnResult.ans)}`;
+        } catch (cnnError) {
+          console.error("Error en predicción CNN:", cnnError);
+        }
+      }
+
+      const response = await sessionRef.current.prompt(promptText);
       setMessages((prev) => [...prev, { role: "assistant", text: response }]);
     } catch (error) {
       console.error("Error en la inferencia:", error);
@@ -86,6 +137,10 @@ export function useChatbot() {
     messages,
     input,
     setInput,
+    selectedImage,
+    setSelectedImage,
+    imagePreview,
+    removeImage,
     status,
     isTyping,
     handleSubmit,
