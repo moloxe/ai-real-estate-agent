@@ -1,46 +1,58 @@
-# Astro Starter Kit: Basics
+# LimaHost AI - Agente Inmobiliario
 
-```sh
-bun create astro@latest -- --template basics
+## Contexto del Proyecto
+**LimaHost AI** es un asistente virtual inteligente para el sector de bienes raíces. Esta aplicación web ofrece una interfaz de chat interactiva (`LocalChatbot`) que permite a los usuarios no solo comunicarse mediante texto, sino también adjuntar y enviar imágenes (como fotos de propiedades o planos). 
+
+El frontend está diseñado para conectarse con un backend de modelos de Machine Learning (denominado `ModelsNB`), el cual expone distintos modelos como:
+- **MLP (Multilayer Perceptron)**
+- **CNN (Convolutional Neural Network)** - Utilizado para analizar y clasificar las imágenes de inmuebles enviadas desde el chat.
+- **LSTM (Long Short-Term Memory)**
+
+## Tecnologías Principales
+- **Frontend Framework**: [Astro](https://astro.build/)
+- **UI & Componentes**: React
+- **Estilos**: Tailwind CSS 4
+- **Gestión del Estado**: Nano Stores (`@nanostores/react`)
+
+## Requisitos Previos
+- Node.js (>= 22.12.0)
+- Gestor de paquetes: `bun` (recomendado), `npm` o `yarn`
+- Python (si vas a levantar el servidor de modelos localmente)
+
+## Instalación
+
+1. Navega al directorio del proyecto en tu terminal:
+   ```bash
+   cd ai-real-estate-agent
+   ```
+2. Instala las dependencias del frontend:
+   ```bash
+   bun install
+   ```
+
+## Cómo hacerlo funcionar localmente
+
+### 1. Iniciar la Interfaz Web (Frontend)
+Ejecuta el servidor de desarrollo de Astro. Por defecto, esto levantará el proyecto de forma local:
+```bash
+bun run dev
+```
+Abre tu navegador en la URL que indique la consola (generalmente `http://localhost:4321`).
+
+### 2. Iniciar el Backend de Modelos (Requerido para el Chat)
+Para que las peticiones del chatbot y la subida de imágenes funcionen, necesitas el backend de Python corriendo. Si lo tienes en la carpeta `models-nb` (ej. `~/Downloads/models-nb`):
+
+```bash
+cd ruta/a/models-nb
+# Activa el entorno virtual si es necesario
+source venv/bin/activate
+# Instala los requisitos si aún no lo has hecho
+pip install -r requirements.txt
+# Inicia el servidor de FastAPI/Flask
+python server.py
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `bun install`             | Installs dependencies                            |
-| `bun dev`             | Starts local dev server at `localhost:4321`      |
-| `bun build`           | Build your production site to `./dist/`          |
-| `bun preview`         | Preview your build locally, before deploying     |
-| `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `bun astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+### 3. Conexión y Uso
+1. Una vez abierto el frontend de **LimaHost AI** en el navegador, verás un campo para configurar la URL base de los modelos (`ModelsNBBaseUrlInput`).
+2. Ingresa la URL de tu servidor backend de Python (por ejemplo, `http://localhost:8000`).
+3. ¡Listo! Ahora puedes escribir en el chat o hacer clic en el ícono de imagen para adjuntar una foto y poner a prueba los modelos.
