@@ -59,7 +59,7 @@ export function useChatbot() {
     };
   }, []);
 
-  const handleSubmit = async (e: Event) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!input.trim() || status !== "ready" || !sessionRef.current) return;
 
