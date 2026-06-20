@@ -1,5 +1,6 @@
 import { useChatbot } from "../_hooks/useChatbot";
 import { ChatHistory } from "./ChatHistory";
+import SendIcon from "./SendIcon";
 
 export default function LocalChatbot() {
   const { messages, input, setInput, status, isTyping, handleSubmit } =
@@ -23,7 +24,7 @@ export default function LocalChatbot() {
           disabled={status !== "ready" || isTyping}
           className="cursor-pointer rounded-md border-none bg-blue-600 px-5 py-3 font-medium text-white transition-colors duration-200 hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
         >
-          Enviar
+          <SendIcon />
         </button>
       </form>
     </div>
