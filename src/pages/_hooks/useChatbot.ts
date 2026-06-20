@@ -26,7 +26,9 @@ function fileToDataUrl(file: File): Promise<string> {
 
 export function useChatbot() {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(
+    "Alquilo hermoso apartamento de diseño sustentable, ideal para 4 personas. El espacio entero cuenta con 2 habitaciones, 3 camas reales de alta calidad y 1.5 baños con grifería de bajo consumo. El precio por noche es de 120 dólares con política de cancelación flexible. Llevo 3 años como host, con identidad verificada y foto de perfil (aún no soy superhost). Ofrecemos 12 amenidades en total para tu cuidado personal y confort. No usamos reserva instantánea ni exigimos verificar el teléfono del huésped. Mostramos la ubicación exacta. Tenemos disponibilidad mayor a 90 días. Hasta ahora mantenemos un excelente orden y limpieza, lo que nos ha dado 25 reseñas con un promedio de calificación de 4.8.",
+  );
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [status, setStatus] = useState<"checking" | "ready" | "unavailable">(
