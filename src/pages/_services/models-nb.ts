@@ -7,11 +7,11 @@ export interface MlpRequest {
 }
 
 export interface LstmRequest {
-  input: any;
+  input: string;
 }
 
 export interface ModelsResponse {
-  ans: any;
+  ans: number;
 }
 
 class ModelsNBService {

@@ -10,6 +10,7 @@ function ModelsNBBaseUrlInput() {
         <input
           type="text"
           className="bg-white rounded text-sm"
+          placeholder="https://..."
           value={baseUrlValue}
           onChange={(e) => setBaseUrl(e.target.value)}
         />
